@@ -1,3 +1,5 @@
+package tetris;
+
 import java.awt.*;
 import java.util.Random;
 
@@ -14,16 +16,20 @@ public class Block {
         this.c = c;
     }
 
+    public Block(Tile t, int field_width, Color c, Random rg) {
+        this(t, rg.nextInt(field_width - t.getWidth()), 0, c);
+    }
+
     public Block(Tile t, int field_width, Color c) {
-        this(t, (new Random()).nextInt(field_width - t.getWidth()), 0, c);
+        this(t, field_width, c, new Random());
     }
 
-    public Block(Tile t, int field_width) {
-        this(t, field_width, new Color((new Random()).nextInt(185) + 50, (new Random()).nextInt(185) + 50, (new Random()).nextInt(185) + 50));
+    public Block(Tile t, int field_width, Random rg) {
+        this(t, field_width, new Color((new Random()).nextInt(185) + 50, (new Random()).nextInt(185) + 50, (new Random()).nextInt(185) + 50), rg);
     }
 
-    public Block(int field_width) {
-        this(Tile.randomTile(), field_width);
+    public Block(int field_width, Random rg) {
+        this(Tile.randomTile(), field_width, rg);
     }
 
     private void move(int dx, int dy) {

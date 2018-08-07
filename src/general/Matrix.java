@@ -1,3 +1,5 @@
+package general;
+
 import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
@@ -302,7 +304,7 @@ public class Matrix {
     @Override
     public String toString() {
         String[][] values = new String[rows][cols];
-        String ret = rows+"x"+cols+"-Matrix:\n";
+        String ret = rows+"x"+cols+"-general.Matrix:\n";
 
         int margin = 2;
         int max_width = Integer.MIN_VALUE;
@@ -368,14 +370,12 @@ public class Matrix {
         }
     }
 
-
-
     public static void main(String[] args) {
         long time = System.currentTimeMillis();
         Matrix m1 = Matrix.randomMatrix(1000,1000,0,1);
         Matrix m2 = Matrix.randomMatrix(1000,1000,0,1);
-        //Matrix m3 = Matrix.randomMatrix(5000,5000,0,1);
-        //Matrix m4 = Matrix.randomMatrix(5000,5000,0,1);
+        //general.Matrix m3 = general.Matrix.randomMatrix(5000,5000,0,1);
+        //general.Matrix m4 = general.Matrix.randomMatrix(5000,5000,0,1);
         long creation_time = (System.currentTimeMillis()-time)/5;
 
         time = System.currentTimeMillis();

@@ -1,5 +1,8 @@
+package tetris;
+
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Field {
     private int field_width, field_height;
@@ -12,6 +15,7 @@ public class Field {
     private long lastMillis = -1;
     private boolean game_over = false;
     private boolean timed;
+    private Random rg;
 
     private final static int grid_size = 25, grid_margin = 2;
 
@@ -28,6 +32,11 @@ public class Field {
     }
 
     public Field(int field_width, int field_height, int fallMillis, boolean timed) {
+        this(field_width, field_height, fallMillis, timed, new Random().nextLong());
+    }
+
+    public Field(int field_width, int field_height, int fallMillis, boolean timed, long seed) {
+        rg = new Random(seed);
         this.field_width = field_width;
         this.field_height = field_height;
         grid = new Color[field_width][field_height];
@@ -54,7 +63,7 @@ public class Field {
 
     public void spawnBlock() {
         current = next;
-        next = new Block(field_width);
+        next = new Block(field_width, rg);
     }
 
     {
@@ -95,7 +104,7 @@ public class Field {
         draw_block(next, left+margin_left, top+margin_top);
     }
 
-    private void draw_block(Block b, float margin_x, float margin_y) {
+    private void draw_block(tetris.Block b, float margin_x, float margin_y) {
         fill(b.getColor());
         boolean[][] tile = b.getTile();
         for (int x=0;x<tile.length;x++) {
@@ -182,6 +191,8 @@ public class Field {
                     saved = null;
                 }
                 score -= 50;
+            } else if (value == 6) {
+                score += 10;
             }
             score -= 10;
         }
@@ -313,7 +324,7 @@ public class Field {
     }
 
     public long getFitness() {
-        long s = score;
+        long s = getScore();
         /*for (int y = 0; y < field_height; y++) {
             boolean empty = true;
             for (int x = 0; x < field_width; x++) {

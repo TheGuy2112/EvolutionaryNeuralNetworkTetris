@@ -1,3 +1,7 @@
+package evolution;
+
+import tetris.Field;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,8 +12,9 @@ public class BetterGeneration {
     private ArrayList<Field> fields;
     private int cycles, field_width, field_height, input_size, output_size, run_throughs;
     private float mutation_new_neuron, mutation_del_neuron, mutation;
+    private boolean seeded;
 
-    public BetterGeneration(int generation_size, int field_width, int field_height, int[] hidden_layers, int output_size, int cycles, float mutation_new_neuron, float mutation_del_neuron, float mutation, int run_throughs) {
+    public BetterGeneration(int generation_size, int field_width, int field_height, int[] hidden_layers, int output_size, int cycles, float mutation_new_neuron, float mutation_del_neuron, float mutation, int run_throughs, boolean seeded) {
         input_size = field_width * field_height * 2;
         players = new ArrayList();
         fields = new ArrayList();
@@ -25,6 +30,7 @@ public class BetterGeneration {
         this.mutation_del_neuron = mutation_del_neuron;
         this.mutation = mutation;
         this.run_throughs = run_throughs;
+        this.seeded = seeded;
     }
 
     public BetterGeneration(BetterGeneration g) {
@@ -40,6 +46,8 @@ public class BetterGeneration {
         run_throughs = g.run_throughs;
         players = new ArrayList();
         fields = new ArrayList();
+        seeded = g.seeded;
+
         Random rg = new Random();
 
         Collections.sort(g.players);
@@ -99,11 +107,17 @@ public class BetterGeneration {
     public BetterPlayer runGeneration() {
         BigDecimal avg = new BigDecimal("0");
         double min = Double.MAX_VALUE;
+        long seed = new Random().nextLong();
         for (int p = 0; p < players.size(); p++) {
             BetterPlayer player = players.get(p);
             long fitness_sum = 0;
             for (int rt=0;rt<run_throughs;rt++) {
-                Field f = new Field(field_width, field_height, 5, false);
+                Field f = null;
+                if (seeded)
+                    f = new Field(field_width, field_height, 5, false, seed);
+                else
+                    f = new Field(field_width, field_height,5,false);
+
                 int c;
                 for (c = 0; c < cycles; c++) {
                     double[] output = player.play(f.toInputArray());
@@ -119,18 +133,19 @@ public class BetterGeneration {
                             f.keyPressed(1);
                             break;
                         case 2:
-                            f.keyPressed(' ');
-                            break;
-                        case 3:
-                            f.keyPressed('a');
-                            break;
-                        case 4:
-                            f.keyPressed('d');
-                            break;
-                        case 5:
                             f.keyPressed(2);
                             break;
+                        case 3:
+                            f.keyPressed(' ');
+                            break;
+                        case 4:
+                            f.keyPressed('a');
+                            break;
+                        case 5:
+                            f.keyPressed('d');
+                            break;
                         case 6:
+                            f.keyPressed(6);
                             break;
                     }
                     f.logic();

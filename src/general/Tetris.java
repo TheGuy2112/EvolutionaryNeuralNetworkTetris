@@ -1,3 +1,8 @@
+package general;
+
+import evolution.*;
+import tetris.*;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,10 +21,12 @@ public class Tetris {
     private static boolean watch_player = false;
     private static Field f;
 
-    private static int population = 100, hidden_layer = 40, cycles = 1000,
+    private static boolean seeded = true;
+
+    private static int population = 500, hidden_layer = 40, cycles = 5000,
             field_width = 10, field_height = 20,
-            cycle = 0, generation = 0, run_throughs = 10;
-    private static int[] hidden_layers = new int[]{200,100,50,25,12};
+            cycle = 0, generation = 0, run_throughs = 1;
+    private static int[] hidden_layers = new int[]{100,75,25};
     private static float mutation_new_neuron = 0.008f, mutation_del_neuron = 0.005f, mutation = 0.05f, mutation_scale=0.99f, min_mutation=0.01f;
     private static int scale_after_gens = 20;
     private static boolean mutation_decrease = false;
@@ -36,7 +43,7 @@ public class Tetris {
         //size(405,605);
         if (ai_play) {
             //g = new Generation(population, field_width, field_height, hidden_layer, 6, cycles, mutation_new_neuron, mutation_del_neuron);
-            g = new BetterGeneration(population, field_width, field_height, hidden_layers, 5, cycles, mutation_new_neuron, mutation_del_neuron, mutation, run_throughs);
+            g = new BetterGeneration(population, field_width, field_height, hidden_layers, 6, cycles, mutation_new_neuron, mutation_del_neuron, mutation, run_throughs, seeded);
             step = 0;
             cycle = 0;
             f = new Field(field_width, field_height, 5, false);
@@ -135,7 +142,7 @@ public class Tetris {
         if (best_player == null || best_player.getFitness() < p.getFitness()) best_player = p;
         fitness_add(p.getFitness());
         System.out.println("Best of this gen: " + p.getFitness());
-        System.out.println("Best overall: "+max_fitness);
+        System.out.println("Best overall: "+best_player.getFitness());
         System.out.println("--------------------------------");
         //g = new Generation(g);
         g = new BetterGeneration(g);
@@ -169,7 +176,7 @@ public class Tetris {
                     fitness_add(p.getFitness());
                 } else if (step == 1) {
                     cycle = 0;
-                    f = new Field(field_width, field_height, 5, false);
+                    f = new tetris.Field(field_width, field_height, 5, false);
                 } else if (step == 2) {
                     g = new Generation(g);
                     generation++;

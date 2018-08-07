@@ -1,3 +1,5 @@
+package tetris;
+
 import java.util.Random;
 
 //Represents an abstract tile

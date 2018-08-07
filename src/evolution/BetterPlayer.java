@@ -1,3 +1,8 @@
+package evolution;
+
+import general.Matrix;
+import general.NeuralNet1;
+
 import java.util.Random;
 
 public class BetterPlayer implements Comparable<BetterPlayer>{
